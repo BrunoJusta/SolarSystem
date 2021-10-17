@@ -1,0 +1,60 @@
+body {
+  overflow-x: hidden;
+}
+
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+main {
+  width: 100vw;
+  color: transparent;
+  z-index: 99;
+  position: absolute;
+  width: 100%;
+  margin: 0px auto;
+  padding: 120px 0px;
+
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+h1,
+h2,
+h3,
+blockquote {
+  font-family: elevon, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+header {
+  background-color: transparent;
+  grid-column: 2 / span 5;
+  font-size: 2.5rem;
+  padding: 2rem;
+  margin-bottom: 200px;
+}
+
+section {
+  grid-column: 2/8;
+  padding: 1rem;
+  background-color: transparent;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  margin-bottom: 200px;
+}
+
+blockquote {
+  margin: 0;
+  padding: 0;
+  grid-column: 2 / span 9;
+  margin-bottom: 200px;
+}
+
+p {
+  grid-column: 2/8;
+  padding: 1rem;
+}
