@@ -22,6 +22,11 @@ camera.position.setZ(30);
 
 renderer.render(scene, camera);
 
+//SPACE
+const spaceTexture = new THREE.TextureLoader().load("./img/space.png");
+scene.background = spaceTexture;
+
+//STARS
 function addStar() {
   const geometry = new THREE.SphereGeometry(0.1, 24, 24);
   const material = new THREE.MeshStandardMaterial({
@@ -36,24 +41,22 @@ function addStar() {
   star.position.set(x, y, z);
   scene.add(star);
 }
-
 Array(1900).fill().forEach(addStar);
 
-const spaceTexture = new THREE.TextureLoader().load("./img/space.png");
-scene.background = spaceTexture;
-
 //SUN
-const sunTexture = new THREE.TextureLoader().load("./img/planet.jpg");
-const sunNormal = new THREE.TextureLoader().load("./img/normal.jpg");
+const sunTexture = new THREE.TextureLoader().load("./img/sun.jpg");
+const sunNormal = new THREE.TextureLoader().load("./img/sunNormal.jpg");
 const sun = new THREE.Mesh(
   new THREE.SphereGeometry(20),
-  new THREE.MeshLambertMaterial({
+  new THREE.MeshPhongMaterial({
     map: sunTexture,
     normalMap: sunNormal,
+    ambient: 0xffffff,
   })
 );
 scene.add(sun);
 
+//PLANETS
 const planets = [
   {
     id: 1,
@@ -61,6 +64,7 @@ const planets = [
     x: 40,
     r: 1.05,
     texture: "./img/mercury.jpeg",
+    normal: "./img/mercuryNormal.png",
     speed: 0.00474,
   },
   {
@@ -69,6 +73,8 @@ const planets = [
     x: 60,
     r: 1.14,
     texture: "./img/venus.png",
+    normal: "./img/venusNormal.png",
+
     speed: 0.0035,
   },
   {
@@ -77,6 +83,8 @@ const planets = [
     x: 80,
     r: 1.15,
     texture: "./img/earth.jpeg",
+    normal: "./img/earthNormal.png",
+
     speed: 0.002978,
   },
   {
@@ -85,6 +93,8 @@ const planets = [
     x: 100,
     r: 1.07,
     texture: "./img/mars.jpeg",
+    normal: "./img/marsNormal.png",
+
     speed: 0.0024,
   },
   {
@@ -93,6 +103,8 @@ const planets = [
     x: 160,
     r: 4.6,
     texture: "./img/jupiter.jpeg",
+    normal: "./img/jupiterNormal.png",
+
     speed: 0.0013,
   },
   {
@@ -101,6 +113,8 @@ const planets = [
     x: 200,
     r: 3.33,
     texture: "./img/saturn.png",
+    normal: "./img/saturnNormal.png",
+
     speed: 0.000968,
   },
   {
@@ -109,6 +123,8 @@ const planets = [
     x: 220,
     r: 2.58,
     texture: "./img/uranus.jpeg",
+    normal: "./img/uranusNormal.png",
+
     speed: 0.00068,
   },
   {
@@ -117,6 +133,8 @@ const planets = [
     x: 240,
     r: 2.56,
     texture: "./img/neptune.jpeg",
+    normal: "./img/neptuneNormal.png",
+
     speed: 0.000543,
   },
   {
@@ -125,21 +143,21 @@ const planets = [
     x: 260,
     r: 1,
     texture: "./img/pluto.jpeg",
+    normal: "./img/plutoNormal.png",
+
     speed: 0.00047,
   },
 ];
-
 const allPlanets = [];
-
 function addPlanets() {
   for (let p = 0; p < planets.length; p++) {
     const planetTexture = new THREE.TextureLoader().load(planets[p].texture);
-    const mercuryNormal = new THREE.TextureLoader().load("./img/normal.jpg");
+    const planetNormal = new THREE.TextureLoader().load(planets[p].normal);
     let planet = new THREE.Mesh(
       new THREE.SphereGeometry(planets[p].r),
       new THREE.MeshStandardMaterial({
         map: planetTexture,
-        normalMap: mercuryNormal,
+        normalMap: planetNormal,
       })
     );
     planet.position.x = planets[p].x;
@@ -151,8 +169,9 @@ function addPlanets() {
     allPlanets.push(planet);
     scene.add(planet);
 
-    const geometry = new THREE.TorusGeometry(planets[p].x, 0.03, 16, 100);
-    const material = new THREE.MeshLambertMaterial({
+    //ORBITS
+    const geometry = new THREE.TorusGeometry(planets[p].x, 0.05, 16, 100);
+    const material = new THREE.MeshStandardMaterial({
       color: 0xf2f2f2f2,
     });
     const orbit = new THREE.Mesh(geometry, material);
@@ -162,11 +181,12 @@ function addPlanets() {
 }
 addPlanets();
 
+//LIGHTS
 const glow = new THREE.HemisphereLight(0xffffff, 0xffff3e, 0.6);
-
-const ambientLight = new THREE.AmbientLight(0xffffff);
+const ambientLight = new THREE.HemisphereLight(0xfdfdfd, 0x0d0d0d, 0.9);
 scene.add(glow, ambientLight);
 
+//CONTROLS
 const controls = new OrbitControls(camera, renderer.domElement);
 
 function animate() {
@@ -191,13 +211,3 @@ function animate() {
 }
 
 animate();
-
-/*function moveCamera() {
-    const t = document.body.getBoundingClientRect().top;
-  
-    camera.position.z = t * -0.01;
-    camera.position.x = t * -0.0002;
-    camera.position.y = t * -0.0002;
-  }
-  
-  document.body.onscroll = moveCamera;*/
